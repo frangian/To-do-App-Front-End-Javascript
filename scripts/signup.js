@@ -26,9 +26,13 @@ window.addEventListener("load", function () {
   /* -------------------------------------------------------------------------- */
   window.addEventListener("submit", function (event) {
     event.preventDefault();
+
     validarDatosIngreso();
 
     function validarDatosIngreso() {
+      registroCorrecto.style.display = "none";
+      errorCampo.style.display = "none";
+
       if (
         validarTexto(inputNombre) &&
         validarTexto(inputApellido) &&
@@ -43,11 +47,8 @@ window.addEventListener("load", function () {
         formData.email = inputEmail.value;
         formData.password = inputContrasena.value;
         realizarRegister(formData);
-        registroCorrecto.style.display = "block";
-        registroCorrecto.textContent = "Registro exitoso";
       } else {
         console.log("algun dato no fue ingresado correctamente");
-        // errorCampo.textContent = mensaje;
         errorCampo.style.display = "block";
         if (!validarContrasenia(inputContrasena)) {
           errorCampo.textContent =
@@ -70,7 +71,6 @@ window.addEventListener("load", function () {
   /*                    FUNCIÓN 2: Realizar el signup [POST]                    */
   /* -------------------------------------------------------------------------- */
   function realizarRegister(formData) {
-
     const settings = {
       method: "POST",
       headers: {
@@ -80,22 +80,22 @@ window.addEventListener("load", function () {
     };
 
     fetch(url + "/auth/registro", settings)
-      .then((response) => response.json())
+      .then((response) => {
+        if (response.status === 400) {
+          throw new Error("Email ya registrado.");
+        } else {
+          return response.json();
+        }
+      })
       .then((data) => {
         console.log("Respuesta del servidor:", data);
-        // Hacer algo con la respuesta del servidor
-
-        // Guardar los datos en el localStorage
-        localStorage.setItem("nombre", formData.nombre);
-        localStorage.setItem("apellido", formData.apellido);
-        localStorage.setItem("email", formData.email);
-
-        // Redirigir a la página mis-tareas.html
-        // window.location.href = "index.html";
+        registroCorrecto.style.display = "block";
+        registroCorrecto.textContent = "Registro exitoso";
       })
       .catch((error) => {
         console.error("Error:", error);
-        // Manejar el error en caso de que ocurra
+        errorCampo.style.display = "block";
+        errorCampo.textContent = "Email ya registrado.";
       });
   }
 });
