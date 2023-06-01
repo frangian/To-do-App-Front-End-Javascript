@@ -18,6 +18,9 @@ window.addEventListener("load", function () {
   );
   const url = "http://localhost:8080/api/v1/usuario";
 
+  let registroCorrecto = document.querySelector("#registroCorrecto");
+  let errorCampo = document.querySelector("#errorCampo");
+
   /* -------------------------------------------------------------------------- */
   /*            FUNCIÓN 1: Escuchamos el submit y preparamos el envío           */
   /* -------------------------------------------------------------------------- */
@@ -34,18 +37,16 @@ window.addEventListener("load", function () {
         compararContrasenias(inputContrasena, inputContrasenaRepetida)
       ) {
         console.log("datos ingresados correctamente");
-        const formData = {};
+        let formData = {};
         formData.nombre = inputNombre.value;
         formData.apellido = inputApellido.value;
         formData.email = inputEmail.value;
         formData.password = inputContrasena.value;
         realizarRegister(formData);
-        const registroCorrecto = document.querySelector("#registroCorrecto");
         registroCorrecto.style.display = "block";
         registroCorrecto.textContent = "Registro exitoso";
       } else {
         console.log("algun dato no fue ingresado correctamente");
-        const errorCampo = document.querySelector("#errorCampo");
         // errorCampo.textContent = mensaje;
         errorCampo.style.display = "block";
         if (!validarContrasenia(inputContrasena)) {

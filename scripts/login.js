@@ -70,7 +70,6 @@ window.addEventListener("load", function () {
         mostrarMensajeError("Verifica tus credenciales");
       });
       
-      obtenerNombreUsuario();
   }
 
   function mostrarMensajeError(mensaje) {

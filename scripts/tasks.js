@@ -195,6 +195,7 @@ window.addEventListener("load", function () {
     fetch(urlTarea + "/" + tarea.id, settings)
       .then((response) => response.json())
       .then((data) => {
+        console.log(data);
         consultarTareas();
       });
   }
@@ -202,7 +203,20 @@ window.addEventListener("load", function () {
   /* -------------------------------------------------------------------------- */
   /*                     FUNCIÓN 7 - Eliminar tarea [DELETE]                    */
   /* -------------------------------------------------------------------------- */
-  function botonBorrarTareaFn() {
-    
+  function botonBorrarTareaFn(id) {
+    const settings = {
+      method: "DELETE",
+      headers: {
+        Authorization: token,
+      },
+    };
+
+    fetch(urlTarea + "/" + id, settings)
+      .then((response) => response.text())
+      .then((data) => {
+        console.log(data);
+        alert(data);
+        consultarTareas();
+      });
   }
 });
