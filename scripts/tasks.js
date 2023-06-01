@@ -6,8 +6,7 @@ if (!localStorage.token) {
 /* ------ comienzan las funcionalidades una vez que carga el documento ------ */
 window.addEventListener("load", function () {
   /* ---------------- variables globales y llamado a funciones ---------------- */
-  document.referrerPolicy = "no-referrer";
-
+  
   const btnCerrarSesion = document.querySelector("#closeApp");
   const urlUsuario = "http://localhost:8080/api/v1/usuario/me";
   const urlTarea = "http://localhost:8080/api/v1/tasks";
@@ -27,8 +26,6 @@ window.addEventListener("load", function () {
 
   obtenerNombreUsuario();
   consultarTareas();
-  // let usuario = {};
-  // console.log(usuario);
 
   /* -------------------------------------------------------------------------- */
   /*                          FUNCIÓN 1 - Cerrar sesión                         */
@@ -56,7 +53,6 @@ window.addEventListener("load", function () {
       })
       .then((data) => {
         usuario = data;
-        // console.log(usuario);
         showUserName(data.nombre + " " + data.apellido);
       });
 
@@ -80,10 +76,10 @@ window.addEventListener("load", function () {
         Authorization: token,
       },
     };
-
+    
     fetch(urlTarea, settings)
-      .then((response) => response.json())
-      .then((data) => {
+    .then((response) => response.json())
+    .then((data) => {
         let contador = 0;
         data.forEach((element) => {
           if (element.completed) {
@@ -152,6 +148,9 @@ window.addEventListener("load", function () {
   /*                  FUNCIÓN 5 - Renderizar tareas en pantalla                            */
   /* ------------------------------------------------------------------------------------- */
   function renderizarTareas(listado, contador) {
+    if (contador === 0) {
+      cantidadFinalizadas.innerHTML = contador;
+    }
     if (!listado.completed) {
       tareasPendientes.innerHTML += `
       <li class="tarea">
@@ -162,7 +161,7 @@ window.addEventListener("load", function () {
         </button>
         <div class="descripcion">
             <p class="nombre">${listado.description}</p>
-            <p class="timestamp">${listado.createdAt.slice(0, 10)}</p>
+            <p class="timestamp">${listado.createdAt}</p>
         </div>
     </li>`;
     }
@@ -183,7 +182,6 @@ window.addEventListener("load", function () {
         </li>`;
     }
   }
-
   /* -------------------------------------------------------------------------- */
   /*                  FUNCIÓN 6 - Cambiar estado de tarea [PUT]                 */
   /* -------------------------------------------------------------------------- */
