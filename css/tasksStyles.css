@@ -234,3 +234,9 @@ footer {
 footer img {
     height: 100%;
 }
+
+.oculto {
+    display: none;
+    width: 30px;
+    height: 3px;
+}

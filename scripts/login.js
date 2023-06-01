@@ -28,12 +28,12 @@ window.addEventListener("load", function () {
     if (validarEmail(inputEmail)) {
       formData.email = inputEmail.value;
       formData.password = inputContrasena.value;
-      //   console.log(formData);
+      console.log(formData);
       realizarLogin(formData);
     } else {
       console.log("datos ingresados incorrectamente");
 
-      mostrarMensajeError("Datos ingresados incorrectamente")
+      mostrarMensajeError("Datos ingresados incorrectamente");
     }
   });
 
@@ -48,31 +48,29 @@ window.addEventListener("load", function () {
       },
       body: JSON.stringify(formData),
     };
-  
+
     fetch(url + "/auth/login", settings)
       .then((response) => {
         if (response.status === 403) {
-          throw new Error("Acceso denegado. Credenciales ingresadas incorrectas.");
+          throw new Error(
+            "Acceso denegado. Credenciales ingresadas incorrectas."
+          );
         }
         return response.json();
       })
       .then((data) => {
         console.log("Respuesta del servidor:", data);
-        // Hacer algo con la respuesta del servidor
-  
         // Guardar los datos en el localStorage
-        localStorage.setItem("id", data.id);
-        localStorage.setItem("nombre", data.nombre);
-        localStorage.setItem("apellido", data.apellido);
-        localStorage.setItem("email", data.email);
-  
+        localStorage.setItem("token", data.token);
         // Redirigir a la página mis-tareas.html
         window.location.href = "mis-tareas.html";
       })
       .catch((error) => {
         console.error("Error:", error);
-        mostrarMensajeError("Verifica tus credenciales")
+        mostrarMensajeError("Verifica tus credenciales");
       });
+      
+      obtenerNombreUsuario();
   }
 
   function mostrarMensajeError(mensaje) {
