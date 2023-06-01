@@ -21,6 +21,9 @@ window.addEventListener("load", function () {
   let tareasPendientes = document.querySelector(".tareas-pendientes");
   let tareasTerminadas = document.querySelector(".tareas-terminadas");
   const spiner = document.querySelector(".oculto");
+  let cantidadFinalizadas = document.querySelector(
+    "#cantidad-finalizadas"
+  );
 
   obtenerNombreUsuario();
   consultarTareas();
@@ -81,8 +84,12 @@ window.addEventListener("load", function () {
     fetch(urlTarea, settings)
       .then((response) => response.json())
       .then((data) => {
+        let contador = 0;
         data.forEach((element) => {
-          renderizarTareas(element);
+          if (element.completed) {
+            contador += 1;
+          }
+          renderizarTareas(element, contador);
         });
         let botonCambioEstado = document.querySelectorAll(".change");
         botonCambioEstado.forEach((element) => {
@@ -144,7 +151,7 @@ window.addEventListener("load", function () {
   /* ------------------------------------------------------------------------------------- */
   /*                  FUNCIÓN 5 - Renderizar tareas en pantalla                            */
   /* ------------------------------------------------------------------------------------- */
-  function renderizarTareas(listado) {
+  function renderizarTareas(listado, contador) {
     if (!listado.completed) {
       tareasPendientes.innerHTML += `
       <li class="tarea">
@@ -160,6 +167,7 @@ window.addEventListener("load", function () {
     </li>`;
     }
     if (listado.completed) {
+      cantidadFinalizadas.innerHTML = contador;
       tareasTerminadas.innerHTML += `
         <li class="tarea">
             <div class="hecha">
